@@ -1,0 +1,42 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.react-flow-container {
+  width: 100%;
+  height: 800px; /* Adjust height as needed */
+}
+
+.react-flow__handle {
+  background-color: #555;
+  /* other styles */
+}
+
+
+/* Add this to your stylesheet */
+.options-toolbox {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  /* Adjust the styling as needed */
+}
+
+.custom-node {
+  border: 2px solid #333;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+

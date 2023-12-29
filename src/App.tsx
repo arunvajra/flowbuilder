@@ -6,11 +6,19 @@ import ReactFlow, {
   MiniMap,
   useNodesState,
   useEdgesState,
-  addEdge
+  addEdge,
+  Node,
+  Edge
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-const DrugReviewNode = ({ data, id }) => (
+interface NodeData {
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>, id: string) => void;
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>, id: string) => void;
+}
+
+const DrugReviewNode = ({ data, id }: { data: NodeData; id: string }) => (
   <div className="custom-node">
     <Handle type="target" position="top" />
     <p>What is the drug you are reviewing?</p>
@@ -19,7 +27,7 @@ const DrugReviewNode = ({ data, id }) => (
   </div>
 );
 
-const FollowUpNode = ({ data, id }) => (
+const FollowUpNode = ({ data, id }: { data: NodeData; id: string }) => (
   <div className="custom-node">
     <Handle type="target" position="top" />
     <p>Follow-up Questions:</p>
@@ -28,7 +36,7 @@ const FollowUpNode = ({ data, id }) => (
   </div>
 );
 
-const QuestionNode = ({ data, id, onChange }) => (
+const QuestionNode = ({ data, id, onChange }: { data: NodeData; id: string }) => (
   <div className="custom-node">
     <Handle type="target" position="top" />
     <p>Question:</p>
@@ -37,7 +45,7 @@ const QuestionNode = ({ data, id, onChange }) => (
   </div>
 );
 
-const AnswerNode = ({ data, id, onChange }) => (
+const AnswerNode = ({ data, id, onChange }: { data: NodeData; id: string }) => (
   <div className="custom-node">
     <Handle type="target" position="top" />
     <p>Answer:</p>
@@ -46,7 +54,7 @@ const AnswerNode = ({ data, id, onChange }) => (
   </div>
 );
 
-const PromptNode = ({ data, id, onChange }) => (
+const PromptNode = ({ data, id, onChange }: { data: NodeData; id: string }) => (
   <div className="custom-node">
     <Handle type="target" position="top" />
     <p>Prompt:</p>
@@ -76,7 +84,8 @@ function App() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [drugName, setDrugName] = useState('');
   const [lastNodeType, setLastNodeType] = useState('');
-  const [answerCount, setAnswerCount] = useState({});
+  const [answerCount, setAnswerCount] = useState<Record<string, number>>({});
+
 
   const updateNodeData = useCallback((nodeId, newValue) => {
     setNodes((nds) => nds.map((node) => {
@@ -87,13 +96,13 @@ function App() {
     }));
   }, [setNodes]);
 
-  const onDrugNameChange = useCallback((e, id) => {
+  const onDrugNameChange = useCallback((e: ChangeEvent<HTMLInputElement>, id: string) => {
     setDrugName(e.target.value);
     updateNodeData(id, e.target.value);
   }, [updateNodeData]);
 
-  const handleKeyPress = useCallback((e, id) => {
-    if (e.key === 'Enter' && e.target.value.trim()) {
+  const handleKeyPress = useCallback((e: KeyboardEvent<HTMLInputElement>, id: string) => {
+    if (e.key === 'Enter' && e.currentTarget.value.trim()) {
       const followUpId = `followUp-${id}`;
       const newNode = {
         id: followUpId,
